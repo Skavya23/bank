@@ -1,0 +1,39 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import classification_report, accuracy_score
+import matplotlib.pyplot as plt
+from sklearn import tree
+
+df = pd.read_csv(r"C:\Users\jrahu\Desktop\jupyter projects\bank\bank.csv", sep=';')
+
+print(df.head())
+
+label_encoders = {}
+for column in df.select_dtypes(include= bank).columns:
+    le = LabelEncoder()
+    df[column] = le.fit_transform(df[column])
+    label_encoders[column] = le
+
+X = df.drop('y', axis=1) 
+y = df['y']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+clf = DecisionTreeClassifier()
+clf.fit(X_train, y_train)
+
+y_pred = clf.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+report = classification_report(y_test, y_pred)
+
+print(f'Accuracy: {accuracy:.2f}')
+print('Classification Report:')
+print(report)
+
+plt.figure(figsize=(20,10))
+tree.plot_tree(clf, filled=True, feature_names=X.columns, class_names=['No', 'Yes'])
+plt.show()
+[8:44 pm, 18/9/2024] 6374767285: import tweepy
